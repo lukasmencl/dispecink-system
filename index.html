@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moje týdny – 4Cargo</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Dispečink – 4Cargo / 4Sped</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --navy: #1a2e4a;
     --navy-light: #243d5e;
@@ -25,228 +24,96 @@
     --white: #ffffff;
     --radius: 12px;
     --radius-sm: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--gray-100);
-    color: var(--gray-800);
-    min-height: 100vh;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); color: var(--gray-800); min-height: 100vh; }
 
   /* HEADER */
-  .header {
-    background: var(--navy);
-    color: white;
-    padding: 0 24px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header { background: var(--navy); color: white; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
   .header-logo { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
   .header-logo span { color: var(--blue-light); }
   .header-meta { font-size: 13px; color: rgba(255,255,255,0.5); }
-  .btn-logout {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    background: none;
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
+  .header-nav { display: flex; align-items: center; gap: 8px; }
+  .btn-back { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,0.7); background: none; border: none; cursor: pointer; padding: 6px 10px; border-radius: 6px; transition: all 0.15s; display: none; }
+  .btn-back:hover { background: rgba(255,255,255,0.1); color: white; }
+  .btn-back.visible { display: block; }
+  .btn-logout { font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(255,255,255,0.7); background: none; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
   .btn-logout:hover { background: rgba(255,255,255,0.1); color: white; }
 
-  /* MAIN */
-  .main { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+  .page-title { font-size: 22px; font-weight: 600; color: var(--navy); margin-bottom: 6px; letter-spacing: -0.3px; }
+  .page-subtitle { font-size: 14px; color: var(--gray-400); margin-bottom: 24px; }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-400); margin-bottom: 10px; }
 
-  .page-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 24px;
-    letter-spacing: -0.3px;
-  }
+  /* CARDS */
+  .card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-200); box-shadow: var(--shadow); overflow: hidden; }
+  .card-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-100); font-size: 14px; font-weight: 600; color: var(--navy); }
 
-  /* AKTUÁLNÍ TÝDEN */
+  /* CURRENT WEEK */
   .current-week-section { margin-bottom: 28px; }
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--gray-400);
-    margin-bottom: 10px;
-  }
-
-  .current-week-card {
-    background: var(--white);
-    border-radius: var(--radius);
-    border: 1px solid var(--gray-200);
-    padding: 24px;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .week-badge {
-    background: var(--blue-pale);
-    border-radius: var(--radius-sm);
-    padding: 16px 24px;
-    min-width: 180px;
-    flex-shrink: 0;
-  }
-  .week-badge-number {
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--navy);
-    letter-spacing: -0.5px;
-    line-height: 1;
-  }
-  .week-badge-dates {
-    font-size: 13px;
-    color: var(--blue);
-    margin-top: 4px;
-    font-weight: 500;
-  }
-
+  .current-week-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--gray-200); padding: 24px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 24px; }
+  .week-badge { background: var(--blue-pale); border-radius: var(--radius-sm); padding: 16px 24px; min-width: 180px; flex-shrink: 0; }
+  .week-badge-number { font-size: 28px; font-weight: 600; color: var(--navy); letter-spacing: -0.5px; line-height: 1; }
+  .week-badge-dates { font-size: 13px; color: var(--blue); margin-top: 4px; font-weight: 500; }
   .week-stats { display: flex; gap: 16px; flex: 1; }
-  .stat-box {
-    background: var(--gray-50);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    padding: 14px 20px;
-    flex: 1;
-  }
+  .stat-box { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px 20px; flex: 1; }
   .stat-label { font-size: 11px; color: var(--gray-400); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
   .stat-value { font-size: 22px; font-weight: 600; color: var(--gray-800); margin-top: 2px; }
   .stat-value.green { color: var(--green); }
-
-  .btn-open {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--navy);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-    flex-shrink: 0;
-  }
+  .stat-value.small { font-size: 16px; }
+  .btn-open { font-family: 'DM Sans', sans-serif; background: var(--navy); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: background 0.15s; flex-shrink: 0; }
   .btn-open:hover { background: var(--navy-light); }
 
-  /* OSTATNÍ TÝDNY */
+  /* TWO COL */
   .two-col { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
 
-  .card {
-    background: var(--white);
-    border-radius: var(--radius);
-    border: 1px solid var(--gray-200);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-  .card-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--gray-100);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--navy);
-  }
-
   /* WEEK ROW */
-  .week-row {
-    display: flex;
-    align-items: center;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--gray-100);
-    cursor: pointer;
-    transition: background 0.1s;
-    gap: 16px;
-  }
+  .week-row { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: background 0.1s; gap: 16px; }
   .week-row:last-child { border-bottom: none; }
   .week-row:hover { background: var(--gray-50); }
-
-  .week-row-num {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--navy);
-    min-width: 70px;
-  }
-  .week-row-dates { font-size: 12px; color: var(--gray-400); min-width: 100px; }
+  .week-row-num { font-size: 14px; font-weight: 600; color: var(--navy); min-width: 70px; }
+  .week-row-dates { font-size: 12px; color: var(--gray-400); min-width: 110px; }
   .week-row-stats { display: flex; gap: 16px; flex: 1; font-size: 13px; color: var(--gray-600); }
-  .week-row-stat span { color: var(--gray-400); font-size: 11px; }
   .week-row-profit { font-size: 14px; font-weight: 600; color: var(--green); margin-left: auto; }
-  .week-row-status {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-  }
+  .week-row-status { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
   .status-draft { background: #fef3c7; color: #92400e; }
   .status-closed { background: #dcfce7; color: #166534; }
   .status-locked { background: #e0e7ff; color: #3730a3; }
 
-  /* ARCHIV */
-  .archive-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 13px 20px;
-    border-bottom: 1px solid var(--gray-100);
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--gray-600);
-    transition: background 0.1s;
-  }
+  /* ARCHIVE */
+  .archive-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 20px; border-bottom: 1px solid var(--gray-100); cursor: pointer; font-size: 14px; color: var(--gray-600); transition: background 0.1s; }
   .archive-row:last-child { border-bottom: none; }
   .archive-row:hover { background: var(--gray-50); }
-  .archive-row-arrow { color: var(--gray-400); font-size: 12px; }
+
+  /* DASHBOARD - STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stats-card { background: var(--white); border-radius: var(--radius-sm); border: 1px solid var(--gray-200); padding: 16px 20px; box-shadow: var(--shadow); }
+  .stats-card .stat-label { font-size: 11px; color: var(--gray-400); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .stats-card .stat-value { font-size: 20px; font-weight: 600; color: var(--gray-800); }
+  .stats-card .stat-value.green { color: var(--green); }
+
+  /* VEHICLE ROW */
+  .vehicle-row { display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--gray-100); cursor: pointer; transition: background 0.1s; gap: 16px; }
+  .vehicle-row:last-child { border-bottom: none; }
+  .vehicle-row:hover { background: var(--gray-50); }
+  .vehicle-info { flex: 1; }
+  .vehicle-name { font-size: 15px; font-weight: 600; color: var(--navy); }
+  .vehicle-plate { font-size: 12px; color: var(--gray-400); margin-top: 2px; font-family: monospace; }
+  .vehicle-stats { display: flex; gap: 24px; font-size: 13px; color: var(--gray-600); }
+  .vehicle-stat span { color: var(--gray-400); font-size: 11px; display: block; }
+  .vehicle-profit { font-size: 16px; font-weight: 600; color: var(--green); min-width: 100px; text-align: right; }
+  .vehicle-arrow { color: var(--gray-400); font-size: 18px; }
 
   /* LOADING / ERROR */
-  .loading {
-    text-align: center;
-    padding: 60px;
-    color: var(--gray-400);
-    font-size: 14px;
-  }
-  .spinner {
-    width: 28px; height: 28px;
-    border: 2px solid var(--gray-200);
-    border-top-color: var(--blue);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto 12px;
-  }
+  .loading { text-align: center; padding: 60px; color: var(--gray-400); font-size: 14px; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error-msg {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #dc2626;
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    margin-bottom: 16px;
-  }
-
-  .empty-row {
-    padding: 20px;
-    text-align: center;
-    color: var(--gray-400);
-    font-size: 13px;
-  }
+  .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 16px; }
+  .empty-row { padding: 20px; text-align: center; color: var(--gray-400); font-size: 13px; }
 </style>
 </head>
 <body>
@@ -254,38 +121,41 @@
 <div class="header">
   <div class="header-left">
     <div class="header-logo">4<span>Cargo</span></div>
+    <button class="btn-back" id="btn-back">← Moje týdny</button>
     <div class="header-meta" id="header-meta">Načítám...</div>
   </div>
-  <button class="btn-logout">← Odhlásit</button>
+  <div class="header-nav">
+    <button class="btn-logout">Odhlásit</button>
+  </div>
 </div>
 
-<div class="main">
-  <div class="page-title">Moje týdny</div>
-  <div id="app-content"><div class="loading"><div class="spinner"></div>Načítám data...</div></div>
+<!-- SCREEN 1: MOJE TÝDNY -->
+<div class="screen active" id="screen-tydny">
+  <div class="main">
+    <div class="page-title">Moje týdny</div>
+    <div id="tydny-content"><div class="loading"><div class="spinner"></div>Načítám data...</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 2: DASHBOARD TÝDNE -->
+<div class="screen" id="screen-dashboard">
+  <div class="main">
+    <div class="page-title" id="dash-title">Dashboard týdne</div>
+    <div class="page-subtitle" id="dash-subtitle"></div>
+    <div id="dashboard-content"><div class="loading"><div class="spinner"></div>Načítám...</div></div>
+  </div>
 </div>
 
 <script>
 const SUPABASE_URL = 'https://bctgkyviyuqkouqjwuwg.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdGdreXZpeXVxa291cWp3dXdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjg5MDksImV4cCI6MjA4ODgwNDkwOX0.kJLSChWfpOunBpTZ1Ry4IKcg57mY8KnsklpDaGNDEy4';
 
-async function query(sql) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/`, {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  });
-}
+let appData = { cards: [], dispatchers: [], companies: [], deployments: [], transports: [], vehicles: [] };
+let currentCardId = null;
 
 async function fetchData(table, params = '') {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Accept': 'application/json'
-    }
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Accept': 'application/json' }
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
@@ -304,7 +174,7 @@ function getWeekDates(year, week) {
 }
 
 function formatCzk(val) {
-  if (!val) return '—';
+  if (!val && val !== 0) return '—';
   return new Intl.NumberFormat('cs-CZ').format(Math.round(val)) + ' Kč';
 }
 
@@ -315,49 +185,118 @@ function statusLabel(s) {
   return [s, ''];
 }
 
+function getCardStats(cardId) {
+  const deps = appData.deployments.filter(d => d.week_card_id === cardId);
+  const depIds = deps.map(d => d.id);
+  const trans = appData.transports.filter(t => depIds.includes(t.fleet_deployment_id));
+  const obrat = trans.reduce((s, t) => s + (parseFloat(t.purchase_price_czk_snapshot) || 0), 0);
+  const naklady = deps.reduce((s, d) => {
+    const km = parseFloat(d.km) || 0;
+    const cenaKm = parseFloat(d.vehicle_price_per_km) || 0;
+    const bonus = parseFloat(d.driver_bonus_cost) || 0;
+    const park = parseFloat(d.parking_cost) || 0;
+    const opt = parseFloat(d.optional_cost_amount) || 0;
+    return s + (km * cenaKm) + bonus + park + opt;
+  }, 0);
+  return { vozidel: deps.length, preprav: trans.length, obrat, naklady, zisk: obrat - naklady };
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  const btnBack = document.getElementById('btn-back');
+  btnBack.classList.toggle('visible', name !== 'tydny');
+}
+
+function openDashboard(cardId) {
+  currentCardId = cardId;
+  const card = appData.cards.find(c => c.id === cardId);
+  if (!card) return;
+  document.getElementById('dash-title').textContent = `Týden ${card.week_number}`;
+  document.getElementById('dash-subtitle').textContent = getWeekDates(card.year, card.week_number);
+  showScreen('dashboard');
+  renderDashboard(card);
+}
+
+function renderDashboard(card) {
+  const deps = appData.deployments.filter(d => d.week_card_id === card.id);
+  const allTrans = appData.transports.filter(t => deps.map(d => d.id).includes(t.fleet_deployment_id));
+  const totalObrat = allTrans.reduce((s, t) => s + (parseFloat(t.purchase_price_czk_snapshot) || 0), 0);
+  const totalNaklady = deps.reduce((s, d) => {
+    const km = parseFloat(d.km) || 0;
+    const bonus = parseFloat(d.driver_bonus_cost) || 0;
+    const park = parseFloat(d.parking_cost) || 0;
+    const opt = parseFloat(d.optional_cost_amount) || 0;
+    return s + (km * parseFloat(d.vehicle_price_per_km || 0)) + bonus + park + opt;
+  }, 0);
+  const totalZisk = totalObrat - totalNaklady;
+
+  const vehicleRows = deps.map(dep => {
+    const vehicle = appData.vehicles.find(v => v.id === dep.power_unit_id);
+    const trans = appData.transports.filter(t => t.fleet_deployment_id === dep.id);
+    const obrat = trans.reduce((s, t) => s + (parseFloat(t.purchase_price_czk_snapshot) || 0), 0);
+    const km = parseFloat(dep.km) || 0;
+    const naklady = (km * parseFloat(dep.vehicle_price_per_km || 0)) + parseFloat(dep.driver_bonus_cost || 0) + parseFloat(dep.parking_cost || 0) + parseFloat(dep.optional_cost_amount || 0);
+    const zisk = obrat - naklady;
+    return { dep, vehicle, trans, obrat, naklady, zisk, km };
+  });
+
+  document.getElementById('dashboard-content').innerHTML = `
+    <div class="stats-row">
+      <div class="stats-card"><div class="stat-label">Vozidel</div><div class="stat-value">${deps.length}</div></div>
+      <div class="stats-card"><div class="stat-label">Přeprav</div><div class="stat-value">${allTrans.length}</div></div>
+      <div class="stats-card"><div class="stat-label">Obrat</div><div class="stat-value small">${formatCzk(totalObrat)}</div></div>
+      <div class="stats-card"><div class="stat-label">Náklady</div><div class="stat-value small">${formatCzk(totalNaklady)}</div></div>
+      <div class="stats-card"><div class="stat-label">Výsledek</div><div class="stat-value small green">${formatCzk(totalZisk)}</div></div>
+    </div>
+
+    <div class="section-label">Vozidla</div>
+    <div class="card">
+      ${vehicleRows.length === 0 ? '<div class="empty-row">Žádná vozidla v tomto týdnu</div>' :
+        vehicleRows.map(r => `
+          <div class="vehicle-row">
+            <div class="vehicle-info">
+              <div class="vehicle-name">${r.vehicle ? r.vehicle.vehicle_name : '—'}</div>
+              <div class="vehicle-plate">SPZ: ${r.vehicle ? r.vehicle.plate_number : '—'}</div>
+            </div>
+            <div class="vehicle-stats">
+              <div class="vehicle-stat"><span>Přeprav</span>${r.trans.length}</div>
+              <div class="vehicle-stat"><span>Km</span>${r.km ? r.km : '—'}</div>
+            </div>
+            <div class="vehicle-profit">${formatCzk(r.zisk)}</div>
+            <div class="vehicle-arrow">›</div>
+          </div>
+        `).join('')
+      }
+    </div>
+  `;
+}
+
 async function loadApp() {
   try {
-    const [cards, dispatchers, companies, deployments, transports] = await Promise.all([
+    const [cards, dispatchers, companies, deployments, transports, vehicles] = await Promise.all([
       fetchData('dispatcher_week_cards', 'order=year.desc,week_number.desc'),
-      fetchData('dispatchers', ''),
-      fetchData('companies', ''),
-      fetchData('fleet_deployment', ''),
-      fetchData('transports', '')
+      fetchData('dispatchers'),
+      fetchData('companies'),
+      fetchData('fleet_deployment'),
+      fetchData('transports'),
+      fetchData('vehicles')
     ]);
+
+    appData = { cards, dispatchers, companies, deployments, transports, vehicles };
 
     const dispatcher = dispatchers[0] || {};
     const company = companies[0] || {};
     document.getElementById('header-meta').textContent = `Dispečer: ${dispatcher.name || '—'}  |  ${company.name || '—'}`;
 
-    // Spočítej statistiky pro každou kartu
-    const cardStats = {};
-    cards.forEach(c => {
-      const deps = deployments.filter(d => d.week_card_id === c.id);
-      const depIds = deps.map(d => d.id);
-      const trans = transports.filter(t => depIds.includes(t.fleet_deployment_id));
-      const obrat = trans.reduce((s, t) => s + (parseFloat(t.purchase_price_czk_snapshot) || 0), 0);
-      const naklady = deps.reduce((s, d) => {
-        const km = parseFloat(d.km) || 0;
-        const cenaKm = parseFloat(d.vehicle_price_per_km) || 0;
-        const bonus = parseFloat(d.driver_bonus_cost) || 0;
-        const park = parseFloat(d.parking_cost) || 0;
-        const opt = parseFloat(d.optional_cost_amount) || 0;
-        return s + (km * cenaKm) + bonus + park + opt;
-      }, 0);
-      cardStats[c.id] = { vozidel: deps.length, preprav: trans.length, obrat, zisk: obrat - naklady };
-    });
-
     const currentWeek = cards[0];
-    const otherMonthCards = cards.slice(1);
-
-    // Archiv – unikátní měsíce
-    const now = new Date();
+    const otherCards = cards.slice(1);
     const archiveMonths = ['Březen 2026', 'Únor 2026', 'Leden 2026'];
 
-    const stats = currentWeek ? cardStats[currentWeek.id] : {};
+    const stats = currentWeek ? getCardStats(currentWeek.id) : {};
     const [slabel, sclass] = currentWeek ? statusLabel(currentWeek.status) : ['—', ''];
 
-    document.getElementById('app-content').innerHTML = `
+    document.getElementById('tydny-content').innerHTML = `
       ${currentWeek ? `
       <div class="current-week-section">
         <div class="section-label">Aktuální týden</div>
@@ -367,20 +306,11 @@ async function loadApp() {
             <div class="week-badge-dates">${getWeekDates(currentWeek.year, currentWeek.week_number)}</div>
           </div>
           <div class="week-stats">
-            <div class="stat-box">
-              <div class="stat-label">Vozidel</div>
-              <div class="stat-value">${stats.vozidel || 0}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Přeprav</div>
-              <div class="stat-value">${stats.preprav || 0}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Zisk</div>
-              <div class="stat-value green">${formatCzk(stats.zisk)}</div>
-            </div>
+            <div class="stat-box"><div class="stat-label">Vozidel</div><div class="stat-value">${stats.vozidel || 0}</div></div>
+            <div class="stat-box"><div class="stat-label">Přeprav</div><div class="stat-value">${stats.preprav || 0}</div></div>
+            <div class="stat-box"><div class="stat-label">Zisk</div><div class="stat-value green">${formatCzk(stats.zisk)}</div></div>
           </div>
-          <button class="btn-open">Otevřít týden →</button>
+          <button class="btn-open" onclick="openDashboard('${currentWeek.id}')">Otevřít týden →</button>
         </div>
       </div>
       ` : '<div class="error-msg">Žádné týdenní karty nenalezeny.</div>'}
@@ -389,17 +319,17 @@ async function loadApp() {
         <div>
           <div class="section-label">Další týdny v tomto měsíci</div>
           <div class="card">
-            ${otherMonthCards.length === 0 ? '<div class="empty-row">Žádné další týdny</div>' :
-              otherMonthCards.map(c => {
-                const s = cardStats[c.id];
+            ${otherCards.length === 0 ? '<div class="empty-row">Žádné další týdny</div>' :
+              otherCards.map(c => {
+                const s = getCardStats(c.id);
                 const [sl, sc] = statusLabel(c.status);
                 return `
-                <div class="week-row">
+                <div class="week-row" onclick="openDashboard('${c.id}')">
                   <div class="week-row-num">Týden ${c.week_number}</div>
                   <div class="week-row-dates">${getWeekDates(c.year, c.week_number)}</div>
                   <div class="week-row-stats">
-                    <div><span>Přeprav: </span>${s.preprav || '—'}</div>
-                    <div><span>Km: </span>—</div>
+                    <div>Přeprav: ${s.preprav || '—'}</div>
+                    <div>Km: —</div>
                   </div>
                   <div class="week-row-profit">${s.zisk ? formatCzk(s.zisk) : '—'}</div>
                   <span class="week-row-status ${sc}">${sl}</span>
@@ -411,23 +341,18 @@ async function loadApp() {
         <div>
           <div class="section-label">Archiv</div>
           <div class="card">
-            ${archiveMonths.map(m => `
-              <div class="archive-row">
-                <span>▶ ${m}</span>
-                <span class="archive-row-arrow">›</span>
-              </div>
-            `).join('')}
+            ${archiveMonths.map(m => `<div class="archive-row"><span>▶ ${m}</span><span>›</span></div>`).join('')}
           </div>
         </div>
       </div>
     `;
+
   } catch (err) {
-    document.getElementById('app-content').innerHTML = `
-      <div class="error-msg">Chyba při načítání dat: ${err.message}<br><small>Zkontroluj RLS politiky v Supabase.</small></div>
-    `;
+    document.getElementById('tydny-content').innerHTML = `<div class="error-msg">Chyba: ${err.message}<br><small>Zkontroluj RLS v Supabase.</small></div>`;
   }
 }
 
+document.getElementById('btn-back').addEventListener('click', () => showScreen('tydny'));
 loadApp();
 </script>
 </body>
